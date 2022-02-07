@@ -1,4 +1,6 @@
 {
+	"typeRoots": ["types"],
+	
 	"compilerOptions": {
 		"outDir": "./dist/",
 		"module": "commonjs",

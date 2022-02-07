@@ -28,10 +28,35 @@
 
 grammar csv;
 
+@lexer::header
+{
+	let delimiter = ',';
+	
+	function createCsvLexer(input, delim)
+	{
+		const inst = new csvLexer(input);
+		delimiter = delim;
+		return inst;
+	}
+	
+	function isDelimiter(delim)
+	{
+		return delimiter == delim;
+	}
+
+	exports.createCsvLexer = createCsvLexer;
+	exports.isDelimiter = isDelimiter;
+}
+
+@lexer::members 
+{
+}
+
+
 csvFile: hdr row+ ;
 hdr : row ;
 
-row : field (',' field)* '\r'? '\n' ;
+row : field (DELIMITER field)* '\r'? '\n' ;
 
 field
     : text
@@ -43,7 +68,19 @@ text: TEXT ;
 
 string: STRING ;
 
-TEXT   : ~[,\n\r"]+ ;
+DELIMITER 
+	: ',' { isDelimiter(',') }? 
+	| ';' { isDelimiter(';') }? 
+	| '\t' { isDelimiter('\t') }? 
+	;
+TEXT   
+	: (
+			~[,;\t\n\r"] 
+		| ',' { !isDelimiter(',') }?
+		| ';' { !isDelimiter(';') }?
+		| '\t' { !isDelimiter('\t') }?
+	  )+ ;
+
 STRING : QUOTE ('""' |~'"')* QUOTE ; // quote-quote is an escaped quote
 
 fragment QUOTE: '"' ;

@@ -2,9 +2,11 @@
   "name": "joplin-plugin-csv-import",
   "version": "1.0.0",
   "scripts": {
-    "dist": "webpack --joplin-plugin-config buildMain && webpack --joplin-plugin-config buildExtraScripts && webpack --joplin-plugin-config createArchive",
+    "dist": "antlr4-tool --no-visitor -l ts -o src/generated src/csv.g4 src/csvAnalyze.g4 && webpack --joplin-plugin-config buildMain && webpack --joplin-plugin-config buildExtraScripts && webpack --joplin-plugin-config createArchive",
     "prepare": "npm run dist",
-    "update": "npm install -g generator-joplin && yo joplin --update"
+    "update": "npm install -g generator-joplin && yo joplin --update",
+    "generate-parser": "antlr4-tool --no-visitor -l ts -o src/generated src/csv.g4 src/csvAnalyze.g4",
+    "sample": "node dist/sample.js"
   },
   "license": "MIT",
   "keywords": [
@@ -12,6 +14,7 @@
   ],
   "devDependencies": {
     "@types/node": "^14.0.14",
+    "antlr4-tool": "^1.1.1",
     "chalk": "^4.1.0",
     "copy-webpack-plugin": "^6.1.0",
     "fs-extra": "^9.0.1",
@@ -23,5 +26,9 @@
     "webpack": "^4.43.0",
     "webpack-cli": "^3.3.11",
     "yargs": "^16.2.0"
+  },
+  "dependencies": {
+    "@types/antlr4": "^4.7.2",
+    "antlr4": "4.8.0"
   }
 }

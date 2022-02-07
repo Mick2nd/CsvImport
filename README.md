@@ -1,24 +1,31 @@
 # Joplin CSV Import Plugin
 
-This plug-in can be used for either of 2 purposes:
+This plugin serves the insertion of a md table from CSV text from either the clipboard or a CSV file.
+This plug-in can be used in either of 2 ways:
 
-- You can import a CSV file by using the import command for CSV files
+- You can import a CSV file by using the import command for CSV files:
+  Invoke *File - Import - CSV File* and select the CSV file
 - You can insert the content of the Clipboard interpreting it as CSV text by using the appropriate command *Paste CSV*
+  Copy the contents to the clipboard (from Excel for instance) and invoke the command *Edit - Paste CSV*
 
-In either case the plug-in tries to interprete the text as CSV and builds a table from it.
+In either case the plug-in tries to interprete the text as CSV and builds a table from it. It uses a simple algorithm to determine the used delimiter. This self-recognition enables the use of 3 different delimiter characters (see: *CSV File Format*)
 
-## Building the plugin
+## CSV File Format
 
-The plugin is built using Webpack, which creates the compiled code in `/dist`. A JPL archive will also be created at the root, which can use to distribute the plugin.
+The items in a file line are separated by either of 3 delimiter characters:
 
-To build the plugin, simply run `npm run dist`.
+- a *comma* **','**
+- a *semi-colon* **';'**
+- a *tabulator* **'\t';**
 
-The project is setup to use TypeScript, although you can change the configuration to use plain JavaScript.
+The lines themselves are separated by an optional CARIAGE RETURN and a NEWLINE as usual.
 
-## Updating the plugin framework
+The items in a line may be enclosed by *Double Quotes* enabling them to contain the separator character and escaped quotes.
 
-To update the plugin framework, run `npm run update`.
+The first line of the file / text is a header line with item names.
 
-In general this command tries to do the right thing - in particular it's going to merge the changes in package.json and .gitignore instead of overwriting. It will also leave "/src" as well as README.md untouched.
+The file / text encoding is assumed to be *UTF-8*
 
-The file that may cause problem is "webpack.config.js" because it's going to be overwritten. For that reason, if you want to change it, consider creating a separate JavaScript file and include it in webpack.config.js. That way, when you update, you only have to restore the line that include your file.
+## Tests
+
+The plugin was tested with  an Excel - exported csv file and with a sheet copied from Excel to the clipboard.
