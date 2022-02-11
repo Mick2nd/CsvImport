@@ -42,6 +42,10 @@ export class Listener extends csvListener
 	exitField(ctx: FieldContext): void
 	{
 		super.exitField(ctx);
+		if (this.field == '')
+		{
+			this.field = ' ';												// enable empty cells in MD
+		}
 		this.stream.push(this.field + '|');
 		this.fieldNo ++;
 		console.log('Field detected: ', ctx.getText(), ' : ', this.field);
